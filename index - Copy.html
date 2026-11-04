@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greenleaf Cafe — Coffee, grown slow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..700,0..1&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A1F;
+    --cream:#F3EEDF;
+    --moss:#2E4A34;
+    --moss-dark:#1F3325;
+    --sage:#9CB89A;
+    --honey:#C99A3B;
+    --line:#D8CFB8;
+    --paper:#FBF8F0;
+    --max:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans',sans-serif;
+    font-weight:400;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  /* subtle paper grain, tiled once as a fixed layer */
+  body::before{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:1;
+    opacity:0.035;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  header.site, main, footer{position:relative;z-index:2;}
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    color:var(--moss-dark);
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 40px;}
+  ::selection{background:var(--honey);color:var(--paper);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+
+  /* ---------- Nav ---------- */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:rgba(243,238,223,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 40px;max-width:var(--max);margin:0 auto;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;color:var(--moss-dark);
+  }
+  .brand svg{width:28px;height:28px;flex:none;}
+  .nav-links{display:flex;gap:34px;font-size:0.95rem;}
+  .nav-links a{position:relative;padding:4px 0;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+    background:var(--honey);transition:width .25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    border:1px solid var(--moss-dark);padding:9px 20px;border-radius:2px;
+    font-size:0.9rem;transition:background .2s ease,color .2s ease;
+  }
+  .nav-cta:hover{background:var(--moss-dark);color:var(--paper);}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;}
+  .menu-toggle span{display:block;width:24px;height:2px;background:var(--moss-dark);margin:5px 0;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:90px 0 60px;
+  }
+  .hero::before{
+    content:"";position:absolute;top:-180px;left:-120px;width:520px;height:520px;
+    background:radial-gradient(circle, rgba(156,184,154,0.45) 0%, rgba(156,184,154,0) 70%);
+    pointer-events:none;
+  }
+  .hero .wrap{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:center;
+    position:relative;
+  }
+  .hero-eyebrow{
+    font-size:0.95rem;color:var(--moss);margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .hero-eyebrow::before{
+    content:"";width:26px;height:1px;background:var(--honey);display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem,5vw,4.4rem);
+    line-height:1.02;
+    max-width:11ch;
+    position:relative;
+  }
+
+  .hero p.lede{
+    margin-top:24px;max-width:42ch;font-size:1.08rem;color:#3A4A3D;
+  }
+  .hero-actions{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;padding:14px 26px;border-radius:2px;font-size:0.95rem;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary{background:var(--moss-dark);color:var(--paper);box-shadow:0 10px 22px rgba(31,51,37,0.22);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 26px rgba(31,51,37,0.3);}
+  .btn-ghost{border:1px solid var(--ink);}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper);}
+
+  .hero-art{
+    position:relative;aspect-ratio:4/5;border-radius:3px;overflow:hidden;
+    background:var(--moss-dark);
+    box-shadow:22px 22px 0 -6px var(--cream), 22px 22px 0 0 var(--moss-dark);
+    margin-right:14px;
+  }
+  .hero-art img{width:100%;height:100%;object-fit:cover;}
+  .hero-art .tag{
+    position:absolute;left:18px;bottom:18px;background:var(--paper);
+    padding:12px 16px;font-family:'Fraunces',serif;font-style:italic;font-size:1rem;
+    color:var(--moss-dark);max-width:220px;box-shadow:0 10px 24px rgba(15,25,17,0.18);
+  }
+  .hero-badge{
+    position:absolute;top:20px;right:20px;background:var(--honey);color:var(--moss-dark);
+    width:92px;height:92px;border-radius:50%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    box-shadow:0 12px 26px rgba(201,154,59,0.4);
+  }
+  .hero-badge b{font-family:'Fraunces',serif;font-size:1.4rem;line-height:1;}
+  .hero-badge span{font-size:0.62rem;letter-spacing:0.02em;margin-top:3px;max-width:70px;}
+
+  .vine{position:absolute;pointer-events:none;opacity:0.5;}
+  .vine.v1{top:-40px;right:-60px;width:280px;}
+  .vine.v2{bottom:-80px;left:-70px;width:260px;transform:scaleX(-1);}
+
+  /* ---------- Marquee strip ---------- */
+  .strip{
+    background:var(--moss-dark);color:var(--sage);
+    overflow:hidden;white-space:nowrap;padding:14px 0;
+    border-top:1px solid var(--moss);border-bottom:1px solid var(--moss);
+  }
+  .strip-track{display:inline-flex;gap:48px;animation:scroll 28s linear infinite;}
+  .strip-track span{font-family:'Fraunces',serif;font-style:italic;font-size:1.05rem;}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ---------- Features ---------- */
+  .features .wrap{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  .feature{
+    background:var(--paper);padding:38px 34px;
+    transition:background .25s ease;
+  }
+  .feature:hover{background:var(--cream);}
+  .feature svg{width:34px;height:34px;margin-bottom:18px;}
+  .feature h3{font-size:1.2rem;margin-bottom:8px;}
+  .feature p{font-size:0.92rem;color:#4A5A4D;}
+
+  /* ---------- Section shell ---------- */
+  section{padding:96px 0;}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+    margin-bottom:52px;border-bottom:1px solid var(--line);padding-bottom:22px;
+  }
+  .section-head h2{font-size:clamp(1.9rem,3vw,2.6rem);}
+  .section-head p{max-width:34ch;font-size:0.98rem;color:#4A5A4D;}
+  .section-num{font-family:'Fraunces',serif;font-style:italic;color:var(--honey);font-size:1.1rem;}
+
+  /* ---------- About ---------- */
+  .about .wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:center;}
+  .about-img{position:relative;}
+  .about-img img{border-radius:2px;width:100%;aspect-ratio:1/1;object-fit:cover;}
+  .about-img .frame{
+    position:absolute;inset:18px;border:1px solid var(--paper);border-radius:2px;pointer-events:none;
+  }
+  .about-img .polaroid{
+    position:absolute;bottom:-34px;left:-34px;width:44%;
+    background:var(--paper);padding:10px 10px 34px;box-shadow:0 18px 34px rgba(15,25,17,0.22);
+    transform:rotate(-6deg);
+  }
+  .about-img .polaroid img{aspect-ratio:1/1;border-radius:0;}
+  .about-img .polaroid span{
+    position:absolute;bottom:8px;left:0;right:0;text-align:center;
+    font-family:'Fraunces',serif;font-style:italic;font-size:0.82rem;color:var(--moss-dark);
+  }
+  .about-stats{display:flex;gap:36px;margin-top:56px;}
+  .stat b{display:block;font-family:'Fraunces',serif;font-size:2.1rem;color:var(--moss-dark);}
+  .stat span{font-size:0.85rem;color:#5b6b5e;}
+  .about p{color:#3A4A3D;margin-top:16px;max-width:52ch;}
+
+  /* ---------- Menu ---------- */
+  .menu{background:var(--moss-dark);color:var(--cream);}
+  .menu .section-head{border-color:rgba(243,238,223,0.2);}
+  .menu .section-head h2{color:var(--cream);}
+  .menu .section-head p{color:var(--sage);}
+  .menu-tabs{display:flex;gap:10px;margin-bottom:40px;flex-wrap:wrap;}
+  .menu-tab{
+    padding:9px 18px;border:1px solid rgba(243,238,223,0.35);border-radius:20px;
+    font-size:0.88rem;cursor:pointer;background:transparent;color:var(--cream);
+    transition:background .2s ease, color .2s ease;
+  }
+  .menu-tab.active,.menu-tab:hover{background:var(--honey);color:var(--moss-dark);border-color:var(--honey);}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 60px;}
+  .menu-panel{display:none;}
+  .menu-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:0 60px;}
+  .menu-item{
+    display:flex;justify-content:space-between;gap:14px;padding:18px 0;
+    border-bottom:1px solid rgba(243,238,223,0.15);
+  }
+  .menu-item .name{font-family:'Fraunces',serif;font-size:1.08rem;color:var(--cream);}
+  .menu-item .desc{font-size:0.85rem;color:var(--sage);margin-top:4px;max-width:34ch;}
+  .menu-item .price{font-family:'Fraunces',serif;color:var(--honey);white-space:nowrap;font-size:1.05rem;}
+
+  /* ---------- Gallery ---------- */
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:150px;gap:14px;
+  }
+  .gallery-grid img{width:100%;height:100%;object-fit:cover;border-radius:2px;transition:transform .5s ease;}
+  .gallery-grid a{overflow:hidden;display:block;border-radius:2px;position:relative;}
+  .gallery-grid a:hover img{transform:scale(1.08);}
+  .gallery-grid a::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(31,51,37,0) 55%, rgba(31,51,37,0.55) 100%);
+    opacity:0;transition:opacity .35s ease;
+  }
+  .gallery-grid a:hover::after{opacity:1;}
+  .g1{grid-column:span 2;grid-row:span 2;}
+  .g2{grid-column:span 1;grid-row:span 1;}
+  .g3{grid-column:span 1;grid-row:span 2;}
+  .g4{grid-column:span 1;grid-row:span 1;}
+  .g5{grid-column:span 2;grid-row:span 1;}
+  .g6{grid-column:span 1;grid-row:span 1;}
+
+  /* ---------- Testimonials ---------- */
+  .testi{background:var(--paper);}
+  .testi-track{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+  .testi-card{
+    padding:34px 30px 30px;border:1px solid var(--line);border-radius:2px;background:var(--cream);
+    position:relative;transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .testi-card:hover{transform:translateY(-6px);box-shadow:0 20px 34px rgba(15,25,17,0.1);}
+  .testi-card::before{
+    content:"“";position:absolute;top:6px;left:26px;font-family:'Fraunces',serif;
+    font-size:3.2rem;color:var(--honey);opacity:0.5;line-height:1;
+  }
+  .testi-card p.quote{font-family:'Fraunces',serif;font-style:italic;font-size:1.12rem;color:var(--moss-dark);position:relative;}
+  .testi-who{display:flex;align-items:center;gap:12px;margin-top:20px;}
+  .testi-who .dot{width:38px;height:38px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;color:var(--moss-dark);font-weight:600;}
+  .testi-who b{display:block;font-size:0.92rem;}
+  .testi-who span{font-size:0.8rem;color:#6b7a6e;}
+
+  /* ---------- Visit / hours ---------- */
+  .visit .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+  .hours-list{margin-top:20px;}
+  .hours-row{
+    display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px dashed var(--line);
+    font-size:0.98rem;
+  }
+  .hours-row b{font-weight:500;}
+  .addr{margin-top:26px;font-size:0.98rem;color:#3A4A3D;}
+  .addr a{color:var(--moss);text-decoration:underline;text-underline-offset:3px;}
+  .map-block{
+    position:relative;border-radius:2px;overflow:hidden;background:var(--sage);
+    min-height:340px;
+  }
+  .map-dots{
+    position:absolute;inset:0;
+    background-image:radial-gradient(circle, rgba(31,51,37,0.35) 1.4px, transparent 1.4px);
+    background-size:22px 22px;
+  }
+  .map-pin{
+    position:absolute;left:52%;top:44%;transform:translate(-50%,-100%);
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .map-pin svg{width:38px;height:38px;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.25));}
+  .map-pin span{
+    margin-top:6px;background:var(--paper);padding:5px 10px;border-radius:2px;
+    font-size:0.8rem;font-family:'Fraunces',serif;
+  }
+
+  /* ---------- Newsletter ---------- */
+  .cta-band{
+    background:var(--moss-dark);color:var(--cream);text-align:left;
+  }
+  .cta-band .wrap{
+    display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;
+    padding-top:60px;padding-bottom:60px;
+  }
+  .cta-band h2{color:var(--cream);font-size:clamp(1.7rem,3vw,2.3rem);max-width:16ch;}
+  form.signup{display:flex;gap:0;border-bottom:1px solid rgba(243,238,223,0.4);min-width:320px;padding-bottom:10px;}
+  form.signup input{
+    background:transparent;border:none;color:var(--cream);font-family:'Work Sans',sans-serif;
+    font-size:1rem;flex:1;outline:none;
+  }
+  form.signup input::placeholder{color:rgba(243,238,223,0.55);}
+  form.signup button{
+    background:none;border:none;color:var(--honey);font-family:'Fraunces',serif;font-style:italic;
+    cursor:pointer;font-size:1rem;
+  }
+  .form-note{font-size:0.8rem;color:var(--sage);margin-top:10px;}
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:var(--ink);color:var(--cream);padding:60px 0 26px;
+    border-top:3px solid var(--honey);
+  }
+  .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:40px;}
+  .foot-brand{font-family:'Fraunces',serif;font-size:1.3rem;}
+  .foot-brand p{font-size:0.88rem;color:var(--sage);margin-top:12px;max-width:28ch;}
+  footer h4{font-size:0.85rem;color:var(--sage);margin-bottom:14px;font-weight:500;}
+  footer ul{list-style:none;}
+  footer li{margin-bottom:9px;font-size:0.92rem;}
+  footer li a:hover{color:var(--honey);}
+  .foot-bottom{
+    margin-top:50px;padding-top:20px;border-top:1px solid rgba(243,238,223,0.12);
+    display:flex;justify-content:space-between;font-size:0.8rem;color:#7d8a7f;flex-wrap:wrap;gap:10px;
+  }
+
+  /* ---------- Reveal on scroll (single orchestrated pass) ---------- */
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-art{order:-1;aspect-ratio:16/10;margin-right:0;box-shadow:none;}
+    .features .wrap{grid-template-columns:1fr;}
+    .about .wrap{grid-template-columns:1fr;}
+    .about-img .polaroid{width:36%;bottom:-24px;left:12px;}
+    .about-stats{margin-top:70px;}
+    .menu-panel.active{grid-template-columns:1fr;}
+    .visit .wrap{grid-template-columns:1fr;}
+    .testi-track{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 22px;}
+    nav{padding:16px 22px;}
+    .nav-links{
+      position:fixed;inset:64px 0 0 0;background:var(--cream);flex-direction:column;
+      padding:30px;gap:22px;font-size:1.1rem;transform:translateX(100%);
+      transition:transform .3s ease;
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-cta{display:none;}
+    .menu-toggle{display:block;}
+    .cta-band .wrap{padding-top:46px;padding-bottom:46px;}
+    .foot-grid{grid-template-columns:1fr;}
+  }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--honey);outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav>
+    <a href="#top" class="brand">
+      <svg viewBox="0 0 40 40" fill="none"><path d="M20 4C11 8 6 16 6 24c0 8 6 12 14 12s14-4 14-12C34 16 29 8 20 4Z" stroke="#2E4A34" stroke-width="2"/><path d="M20 10v22" stroke="#C99A3B" stroke-width="2" stroke-linecap="round"/></svg>
+      Greenleaf Cafe
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">Our story</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#visit">Visit</a>
+    </div>
+    <a href="#visit" class="nav-cta">Reserve a table</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <svg class="vine v1" viewBox="0 0 200 200" fill="none"><path d="M10 190C60 160 40 100 90 90C140 80 130 30 190 10" stroke="#33513B" stroke-width="2"/><circle cx="90" cy="90" r="5" fill="#C99A3B"/><circle cx="190" cy="10" r="4" fill="#9CB89A"/></svg>
+    <div class="wrap">
+      <div class="reveal in">
+        <p class="hero-eyebrow">A neighbourhood coffeehouse on Fern Street</p>
+        <h1>Coffee, grown slow.</h1>
+        <p class="lede">We roast in small batches, pour with patience, and keep the kitchen stocked with whatever's good at the market this week. Come sit under the plants for a while.</p>
+        <div class="hero-actions">
+          <a href="#menu" class="btn btn-primary">See the menu</a>
+          <a href="#visit" class="btn btn-ghost">Find us</a>
+        </div>
+      </div>
+      <div class="hero-art reveal in">
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1000&auto=format&fit=crop" alt="Sunlit corner of Greenleaf Cafe with hanging plants and a wooden counter">
+        <div class="hero-badge"><b>4.9</b><span>rated by regulars</span></div>
+        <div class="tag">Open every morning, rain or shine.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>Single-origin pour overs</span><span>·</span>
+      <span>Oat milk made in-house</span><span>·</span>
+      <span>Fresh bread every morning</span><span>·</span>
+      <span>Plants everywhere you look</span><span>·</span>
+      <span>Single-origin pour overs</span><span>·</span>
+      <span>Oat milk made in-house</span><span>·</span>
+      <span>Fresh bread every morning</span><span>·</span>
+      <span>Plants everywhere you look</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="wrap">
+      <div class="feature reveal">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M8 16h20l-1 8a9 9 0 0 1-9 8v0a9 9 0 0 1-9-8l-1-8Z" stroke="#33513B" stroke-width="1.6"/><path d="M28 18h3a4 4 0 0 1 0 8h-2" stroke="#33513B" stroke-width="1.6"/><path d="M14 8c0 2-2 2-2 4M20 6c0 2-2 2-2 4" stroke="#C99A3B" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Roasted in small batches</h3>
+        <p>Every bag is roasted on-site, a few kilos at a time, so what you're drinking was picked within the season.</p>
+      </div>
+      <div class="feature reveal">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M20 4C13 9 9 16 9 22c0 7 5 12 11 12s11-5 11-12c0-6-4-13-11-18Z" stroke="#33513B" stroke-width="1.6"/><path d="M20 16v14" stroke="#C99A3B" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Farms we know by name</h3>
+        <p>Three growers, visited every year — we can tell you exactly whose hands picked this season's cherries.</p>
+      </div>
+      <div class="feature reveal">
+        <svg viewBox="0 0 40 40" fill="none"><rect x="7" y="12" width="26" height="20" rx="2" stroke="#33513B" stroke-width="1.6"/><path d="M7 18h26" stroke="#33513B" stroke-width="1.6"/><path d="M13 8v6M27 8v6" stroke="#C99A3B" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Open every single day</h3>
+        <p>No weekly closing day, no surprise holidays — Fern Street can count on us being here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="about-img reveal">
+        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=900&auto=format&fit=crop" alt="Barista carefully pouring latte art at Greenleaf Cafe">
+        <div class="frame"></div>
+        <div class="polaroid">
+          <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=400&auto=format&fit=crop" alt="Potted plant on the cafe windowsill">
+          <span>day one, 2016</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="hero-eyebrow">Our story</p>
+        <h2>Started with one shelf of plants and a second-hand espresso machine.</h2>
+        <p>Greenleaf opened in 2016 in a narrow shopfront that used to sell bicycles. We kept the tall windows, added more plants than was reasonable, and started roasting on weekends. Ten years on, the bikes are gone but the light still falls the same way across the counter every morning.</p>
+        <p>We work directly with three farms — in Yirgacheffe, Huila, and up in the Nilgiris — and change the pour-over list as each harvest comes in.</p>
+        <div class="about-stats">
+          <div class="stat"><b class="count" data-count="9">0</b><span>years on Fern Street</span></div>
+          <div class="stat"><b class="count" data-count="3">0</b><span>partner farms</span></div>
+          <div class="stat"><b class="count" data-count="28">0</b><span>plants (last count)</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="section-num">The menu</p>
+          <h2>What's brewing</h2>
+        </div>
+        <p>A short list, kept honest — everything on it is something we'd order ourselves.</p>
+      </div>
+
+      <div class="menu-tabs" role="tablist">
+        <button class="menu-tab active" data-tab="coffee">Coffee</button>
+        <button class="menu-tab" data-tab="food">Food</button>
+        <button class="menu-tab" data-tab="sweet">Something sweet</button>
+      </div>
+
+      <div class="menu-panel active" id="coffee">
+        <div>
+          <div class="menu-item"><div><div class="name">Filter, house blend</div><div class="desc">Rotating single farm, brewed by pour-over</div></div><div class="price">₹180</div></div>
+          <div class="menu-item"><div><div class="name">Cortado</div><div class="desc">Equal parts espresso and warm milk</div></div><div class="price">₹160</div></div>
+          <div class="menu-item"><div><div class="name">Greenleaf latte</div><div class="desc">House blend, oat milk, a little honey</div></div><div class="price">₹210</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div><div class="name">Cold brew</div><div class="desc">Steeped 18 hours, served over ice</div></div><div class="price">₹190</div></div>
+          <div class="menu-item"><div><div class="name">Masala chai</div><div class="desc">Whole spices, brewed to order</div></div><div class="price">₹130</div></div>
+          <div class="menu-item"><div><div class="name">Matcha, iced or hot</div><div class="desc">Ceremonial grade, lightly sweetened</div></div><div class="price">₹220</div></div>
+        </div>
+      </div>
+
+      <div class="menu-panel" id="food">
+        <div>
+          <div class="menu-item"><div><div class="name">Avocado toast</div><div class="desc">Sourdough, chilli oil, sunflower seeds</div></div><div class="price">₹260</div></div>
+          <div class="menu-item"><div><div class="name">Shakshuka</div><div class="desc">Baked eggs, tomato, feta, herb oil</div></div><div class="price">₹290</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div><div class="name">Grilled halloumi wrap</div><div class="desc">Roasted vegetables, mint yoghurt</div></div><div class="price">₹270</div></div>
+          <div class="menu-item"><div><div class="name">Soup of the day</div><div class="desc">Ask what's on the board today</div></div><div class="price">₹200</div></div>
+        </div>
+      </div>
+
+      <div class="menu-panel" id="sweet">
+        <div>
+          <div class="menu-item"><div><div class="name">Banana bread</div><div class="desc">Walnuts, a little too much butter</div></div><div class="price">₹150</div></div>
+          <div class="menu-item"><div><div class="name">Basque cheesecake</div><div class="desc">Burnt top, soft centre</div></div><div class="price">₹210</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div><div class="name">Pistachio croissant</div><div class="desc">Baked fresh every morning</div></div><div class="price">₹180</div></div>
+          <div class="menu-item"><div><div class="name">Affogato</div><div class="desc">Vanilla bean gelato, double espresso</div></div><div class="price">₹230</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="section-num">A look inside</p>
+          <h2>Around the cafe</h2>
+        </div>
+        <p>Mostly plants, mostly quiet corners, mostly good light.</p>
+      </div>
+      <div class="gallery-grid">
+        <a class="g1 reveal" href="#"><img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=900&auto=format&fit=crop" alt="Cafe interior with hanging plants"></a>
+        <a class="g2 reveal" href="#"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=600&auto=format&fit=crop" alt="Latte art close up"></a>
+        <a class="g3 reveal" href="#"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=700&auto=format&fit=crop" alt="Bag of freshly roasted coffee beans"></a>
+        <a class="g4 reveal" href="#"><img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=600&auto=format&fit=crop" alt="Slice of banana bread on a plate"></a>
+        <a class="g5 reveal" href="#"><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=900&auto=format&fit=crop" alt="Friends sitting and talking at a cafe table"></a>
+        <a class="g6 reveal" href="#"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=600&auto=format&fit=crop" alt="Espresso shot being pulled"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="section-num">Regulars say</p>
+          <h2>Kind words from Fern Street</h2>
+        </div>
+      </div>
+      <div class="testi-track">
+        <div class="testi-card reveal">
+          <p class="quote">"The pour-over list changes often enough that I still look forward to it after three years of coming here."</p>
+          <div class="testi-who"><div class="dot">A</div><div><b>Aditi Rao</b><span>Regular since 2021</span></div></div>
+        </div>
+        <div class="testi-card reveal">
+          <p class="quote">"Best banana bread in the city, and I say that having tried most of them out of stubbornness."</p>
+          <div class="testi-who"><div class="dot">R</div><div><b>Rohan Mathew</b><span>Neighbour</span></div></div>
+        </div>
+        <div class="testi-card reveal">
+          <p class="quote">"Quiet enough to work, loud enough that I don't feel awkward taking a call. Rare balance."</p>
+          <div class="testi-who"><div class="dot">S</div><div><b>Sana Iqbal</b><span>Freelance regular</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="visit" id="visit">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="section-num">Visit</p>
+        <h2>Come find us</h2>
+        <div class="hours-list">
+          <div class="hours-row"><b>Monday – Friday</b><span>7:30 AM – 7:00 PM</span></div>
+          <div class="hours-row"><b>Saturday</b><span>8:00 AM – 8:00 PM</span></div>
+          <div class="hours-row"><b>Sunday</b><span>8:00 AM – 5:00 PM</span></div>
+        </div>
+        <p class="addr">14 Fern Street, near the old clocktower<br>
+          <a href="tel:+910000000000">+91 00000 00000</a> · <a href="mailto:hello@greenleafcafe.example">hello@greenleafcafe.example</a>
+        </p>
+        <div class="hero-actions">
+          <a href="#" class="btn btn-primary">Get directions</a>
+        </div>
+      </div>
+      <div class="map-block reveal">
+        <div class="map-dots"></div>
+        <div class="map-pin">
+          <svg viewBox="0 0 24 24" fill="#1F3325"><path d="M12 2C7.6 2 4 5.6 4 10c0 6 8 12 8 12s8-6 8-12c0-4.4-3.6-8-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
+          <span>Greenleaf Cafe</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="cta-band">
+    <div class="wrap">
+      <div>
+        <h2>Know when a new harvest lands.</h2>
+        <p class="form-note">One short email a month. No spam, just beans.</p>
+      </div>
+      <form class="signup" id="signupForm">
+        <input type="email" placeholder="you@email.com" required aria-label="Email address">
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">Greenleaf Cafe</div>
+        <p>A small coffeehouse on Fern Street, roasting slow and staying open late for the ones who need it.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#about">Our story</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="#visit">Hours &amp; location</a></li>
+          <li><a href="tel:+910000000000">Call the cafe</a></li>
+          <li><a href="mailto:hello@greenleafcafe.example">Email us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Greenleaf Cafe. All rights reserved.</span>
+      <span>Made on Fern Street.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const toggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Menu tabs
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Count-up stats, triggered once when scrolled into view
+  const counters = document.querySelectorAll('.count');
+  const countIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.count, 10);
+      const duration = 900;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      countIO.unobserve(el);
+    });
+  }, { threshold: 0.6 });
+  counters.forEach(el => countIO.observe(el));
+
+  // Newsletter form (front-end only, no backend)
+  const form = document.getElementById('signupForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button');
+    const original = btn.textContent;
+    btn.textContent = 'Thanks!';
+    form.querySelector('input').value = '';
+    setTimeout(() => { btn.textContent = original; }, 2200);
+  });
+</script>
+
+</body>
+</html>
